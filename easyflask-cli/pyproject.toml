@@ -6,10 +6,15 @@ authors = ["David Cuy <david.cuy.sanchez@gmail.com>"]
 readme = "README.md"
 packages = [{include = "easyflask_cli"}]
 
+[tool.poetry.scripts]
+easyflask-cli = "easyflask_cli.cli:app"
+
 [tool.poetry.dependencies]
 python = "^3.9"
 typer = {extras = ["all"], version = "^0.7.0"}
-
+python-dotenv = "^0.20.0"
+cookiecutter = "^2.1.1"
+toml = "^0.10.2"
 
 [build-system]
 requires = ["poetry-core"]
