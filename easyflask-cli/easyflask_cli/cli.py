@@ -14,7 +14,7 @@ app.add_typer(project.app, name='project')
 @app.callback(invoke_without_command=True)
 def callback_version(version: bool = False):
     """
-    Prints the version of the CLI.
+    Imprime la versión del CLI.
     """
     if version:
         typer.echo(f'version: {v("easyflask-cli")}')

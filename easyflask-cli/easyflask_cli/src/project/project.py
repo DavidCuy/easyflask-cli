@@ -11,6 +11,9 @@ app = typer.Typer()
 
 @app.command('init')
 def init_project():
+    """
+    Genera un nuevo proyecto con template para flask
+    """
     db_host = ""
     db_user = ""
     db_pass = ""
@@ -39,6 +42,15 @@ def init_project():
     generate_flask_template(project_name, dbDialect, db_host, db_user, db_pass, db_name, db_schema)
 
 def get_random_string(length = 16):
+    """
+    Genera una cadena random de longitud variable
+
+    Args:
+        length (int, optional): Longitudd de la cadena. Defaults to 16.
+
+    Returns:
+        str: Cadena autogenerada
+    """
     characters = string.ascii_letters + string.digits + string.punctuation
     return ''.join(random.choice(characters) for i in range(length))
     
