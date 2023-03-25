@@ -1,11 +1,9 @@
 from ...globals import Constants
 from ..utils.template_gen import generate_flask_template
+from ..utils.strings import get_random_string
 
 import typer
 from click.types import Choice
-
-import random
-import string
 
 app = typer.Typer()
 
@@ -41,17 +39,6 @@ def init_project():
         db_schema = typer.prompt("Nombre del esquema de base de datos")
     generate_flask_template(project_name, dbDialect, db_host, db_user, db_pass, db_name, db_schema)
 
-def get_random_string(length = 16):
-    """
-    Genera una cadena random de longitud variable
 
-    Args:
-        length (int, optional): Longitudd de la cadena. Defaults to 16.
-
-    Returns:
-        str: Cadena autogenerada
-    """
-    characters = string.ascii_letters + string.digits + string.punctuation
-    return ''.join(random.choice(characters) for i in range(length))
     
 

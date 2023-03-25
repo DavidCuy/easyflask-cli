@@ -91,7 +91,7 @@ class Folders(BaseConf):
     services: str
     controllers: str
     endpoints: str
-
+    root: str
 
 @dataclass
 class Definition(BaseConf):
@@ -111,14 +111,26 @@ class Project(BaseConf):
         return Project(definition, folders)
 
 @dataclass
+class Template(BaseConf):
+    files: Files
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'Template':
+        assert isinstance(obj, dict)
+        files = Files.from_dict(obj.get("files"))
+        return Template(files)
+
+@dataclass
 class Config(BaseConf):
     project: Project
+    template: Template
 
     @staticmethod
     def from_dict(obj: Any) -> 'Config':
         assert isinstance(obj, dict)
         project = Project.from_dict(obj.get("project"))
-        return Config(project)
+        template = Template.from_dict(obj.get("template"))
+        return Config(project, template)
 
 def load_config(path="easyflask_project.toml") -> Config:
     config_path = Path(path)
@@ -137,13 +149,14 @@ controller = "templates/isyflask/controller.txt"
 endpoint = "templates/isyflask/routes.txt"
 
 [easyflask.project.folders]
+root = "api"
 models = "api/app/Data/Models"
 services = "api/app/Services"
 controllers = "api/app/Controllers"
-endpoints = "api/routes/"
+endpoints = "api/routes"
         """)
         typer.echo(
             f"Created config file at {config_path} in this path you can find all configuration for the project here.")
         typer.echo(f"Please add the file {config_path} to git tracking and commit it")
     toml_config = toml.loads(config_path.read_text())
-    return Config.from_dict(toml_config["apm"])
+    return Config.from_dict(toml_config["easyflask"])

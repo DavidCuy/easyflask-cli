@@ -1,4 +1,5 @@
 from cookiecutter.main import cookiecutter
+from pathlib import Path
 from ...globals import Constants
 
 def generate_flask_template(project_name: str, db_dialect: str, db_host: str, db_user: str, db_pass: str, db_name: str, db_schema: str):
@@ -31,3 +32,13 @@ def generate_flask_template(project_name: str, db_dialect: str, db_host: str, db
         no_input=True,
         extra_context=config_override
     )
+
+def add_code_to_module(template_path: Path, module_path: Path, modelName: str, code_format_override: dict):
+    module_code = template_path.read_text().format(**code_format_override)
+    module_path.joinpath(f'{modelName}.py').write_text(module_code)
+
+def add_file_to_module(module_path: Path, modelName: str, replace_import: str = None):
+    module_text = module_path.joinpath('__init__.py').read_text()
+    module_text += f"\nfrom .{modelName} import {modelName}" if replace_import is None else f"\nfrom .{modelName} import {replace_import}"
+    module_path.joinpath('__init__.py').write_text(module_text)
+
