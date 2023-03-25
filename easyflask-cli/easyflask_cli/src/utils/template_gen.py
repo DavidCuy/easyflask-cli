@@ -1,5 +1,5 @@
 from cookiecutter.main import cookiecutter
-from ...constants import Constants
+from ...globals import Constants
 
 def generate_flask_template(project_name: str, db_dialect: str, db_host: str, db_user: str, db_pass: str, db_name: str, db_schema: str):
     """

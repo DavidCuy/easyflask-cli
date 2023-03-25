@@ -1,4 +1,4 @@
-from ...constants import Constants
+from ...globals import Constants
 from ..utils.template_gen import generate_flask_template
 
 import typer
