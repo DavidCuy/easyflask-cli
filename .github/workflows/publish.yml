@@ -10,7 +10,7 @@ on:
           - prod
 jobs:
   build:
-    name: Build and Deploy Artifacts
+    name: Build Artifacts
     environment: "${{ github.event.inputs.environment }}"
     runs-on: ubuntu-latest
     steps:
@@ -37,7 +37,7 @@ jobs:
           name: artifact
           path: artifacts.zip
   deploy:
-    name: Deploy
+    name: Deploy to PiPY
     if: ${{ github.event_name != 'pull_request' }}
     needs: [ build ]
     environment: "${{ github.event.inputs.environment }}"
