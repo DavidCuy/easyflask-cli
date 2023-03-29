@@ -28,6 +28,7 @@ jobs:
 
           poetry install
           cd isyflask-cli
+          ls -al
           poetry build
           sudo apt-get install zip
           
@@ -54,5 +55,6 @@ jobs:
           cd isyflask-cli
       - name: Deploy Project
         run: |
+          ls -al
           poetry config pypi-token.pypi ${{ secrets.PIPY_API_TOKEN }}
           poetry publish --build
