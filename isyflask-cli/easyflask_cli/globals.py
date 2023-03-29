@@ -135,23 +135,23 @@ class Config(BaseConf):
         template = Template.from_dict(obj.get("template"))
         return Config(project, template)
 
-def load_config(path="easyflask_project.toml") -> Config:
+def load_config(path="isyflask_project.toml") -> Config:
     config_path = Path(path)
     if not config_path.exists():
         typer.echo("config file not found in the project.", color=typer.colors.YELLOW)
         load_dotenv(".env")
         app_name = os.getenv("app_name") or ""
-        config_path.write_text(f"""[easyflask.project.definition]
+        config_path.write_text(f"""[isyflask.project.definition]
 name = "{app_name}"
 description = ""
 
-[easyflask.template.files]
+[isyflask.template.files]
 model = "templates/isyflask/model.txt"
 service = "templates/isyflask/service.txt"
 controller = "templates/isyflask/controller.txt"
 endpoint = "templates/isyflask/routes.txt"
 
-[easyflask.project.folders]
+[isyflask.project.folders]
 root = "api"
 models = "api/app/Data/Models"
 services = "api/app/Services"
@@ -162,4 +162,4 @@ endpoints = "api/routes"
             f"Created config file at {config_path} in this path you can find all configuration for the project here.")
         typer.echo(f"Please add the file {config_path} to git tracking and commit it")
     toml_config = toml.loads(config_path.read_text())
-    return Config.from_dict(toml_config["easyflask"])
+    return Config.from_dict(toml_config["isyflask"])

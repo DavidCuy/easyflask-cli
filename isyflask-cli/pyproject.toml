@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "easyflask-cli"
+name = "isyflask-cli"
 version = "0.1.0"
 description = ""
 authors = ["David Cuy <david.cuy.sanchez@gmail.com>"]
 readme = "README.md"
-packages = [{include = "easyflask_cli"}]
+packages = [{include = "isyflask_cli"}]
 
 [tool.poetry.scripts]
-easyflask-cli = "easyflask_cli.cli:app"
+isyflask-cli = "isyflask_cli.cli:app"
 
 [tool.poetry.dependencies]
 python = "^3.9"
