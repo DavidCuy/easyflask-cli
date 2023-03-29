@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "isyflask-cli"
-version = "0.1.2"
+version = "0.1.3"
 description = ""
 authors = ["David Cuy <david.cuy.sanchez@gmail.com>"]
 readme = "README.md"
