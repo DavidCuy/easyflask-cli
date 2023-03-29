@@ -19,8 +19,6 @@ def init_project():
     db_schema = ""
     project_name = typer.prompt("Nombre del proyecto")
     
-    docker_db_enable = typer.confirm("¿Desea agregar configuracion de base de datos para desarrollo local en docker?")
-    
     dbChoices = Choice([
         Constants.SQLITE_ENGINE.value,
         Constants.SQLSERVER_ENGINE.value,
@@ -30,12 +28,13 @@ def init_project():
     dbDialect: Choice = typer.prompt("Elija su motor de base de datos", "sqlite", show_choices=True, type=dbChoices)
     
     if dbDialect != Constants.SQLITE_ENGINE.value:
+        docker_db_enable = typer.confirm("¿Desea agregar configuracion de base de datos para desarrollo local en docker?")
         db_host = typer.prompt("Host de la base de datos")
         db_name = typer.prompt("Nombre de la base de datos")
         db_user = typer.prompt("Usuario de la base de datos")
         
         autopassword = False
-        if docker_db_enable is False:
+        if docker_db_enable is True:
             autopassword = typer.confirm("¿Desea autogenerar la contraseña?")
         if autopassword is True:
             db_pass = get_random_string()
