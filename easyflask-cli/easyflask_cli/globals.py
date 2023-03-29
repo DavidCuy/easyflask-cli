@@ -13,6 +13,9 @@ class Constants(Enum):
     SQLSERVER_ENGINE = "mssql"
     MYSQL_ENGINE = "mysql"
     POSTGRESQL_ENGINE = "postgresql"
+    
+    AWS_REPOSITORY = "aws"
+    OTHER_REPOSITORY = "other"
 
 T = TypeVar("T")
 

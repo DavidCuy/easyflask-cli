@@ -2,9 +2,8 @@ from cookiecutter.main import cookiecutter
 from pathlib import Path
 from ...globals import Constants
 
-def generate_flask_template(project_name: str, db_dialect: str, db_host: str, db_user: str, db_pass: str, db_name: str, db_schema: str):
-    """
-    Descarga y configura el template de patron para flask
+def generate_flask_template(project_name: str, db_dialect: str, db_host: str, db_user: str, db_pass: str, db_name: str, db_schema: str, docker_db: bool = False, repository_provider: str = None):
+    """Descarga y configura el template de patron para flask
 
     Args:
         project_name (str): Nombre del proyecto
@@ -14,6 +13,8 @@ def generate_flask_template(project_name: str, db_dialect: str, db_host: str, db
         db_pass (str): Contraseña de base de datos
         db_name (str): Nombre de base de datos
         db_schema (str): Esquema de base de datos (solo postgresql)
+        docker_db (bool, optional): Crea la configuracion de docker para uso local. Defaults to False.
+        repository_provider (str, optional): Genera los flujos de github actions para despliegue en un registro de contenedor. Defaults to None.
     """
     config_override = {
         "directory_name": project_name,
@@ -23,7 +24,9 @@ def generate_flask_template(project_name: str, db_dialect: str, db_host: str, db
         "db_user": db_user,
         "db_pass": db_pass,
         "db_name": db_name,
-        "db_schema": db_schema
+        "db_schema": db_schema,
+        "docker_local_db_enable": docker_db,
+        "repostory_provider": repository_provider
     }
     cookiecutter(
         Constants.FLASK_TEMPLATE.value,

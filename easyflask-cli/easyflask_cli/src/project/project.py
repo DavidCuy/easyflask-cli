@@ -18,6 +18,9 @@ def init_project():
     db_name = ""
     db_schema = ""
     project_name = typer.prompt("Nombre del proyecto")
+    
+    docker_db_enable = typer.confirm("¿Desea agregar configuracion de base de datos para desarrollo local en docker?")
+    
     dbChoices = Choice([
         Constants.SQLITE_ENGINE.value,
         Constants.SQLSERVER_ENGINE.value,
@@ -30,14 +33,25 @@ def init_project():
         db_host = typer.prompt("Host de la base de datos")
         db_name = typer.prompt("Nombre de la base de datos")
         db_user = typer.prompt("Usuario de la base de datos")
-        autopassword = typer.confirm("Desea autogenerar la contraseña?")
+        
+        autopassword = False
+        if docker_db_enable is False:
+            autopassword = typer.confirm("¿Desea autogenerar la contraseña?")
         if autopassword is True:
             db_pass = get_random_string()
         else:
             db_pass = typer.prompt("Contraseña de la base de datos")
     if dbDialect == "postgresql":
         db_schema = typer.prompt("Nombre del esquema de base de datos")
-    generate_flask_template(project_name, dbDialect, db_host, db_user, db_pass, db_name, db_schema)
+    
+    publish_enable = typer.confirm("¿Desea publicar en un repositorio de contenedores?")
+    repository_provider = None
+    if publish_enable:
+        repository_provider: Choice = typer.prompt("Elija el proveedor de registro de contenedor", "aws", show_choices=True, type=Choice([
+            Constants.AWS_REPOSITORY.value,
+            Constants.OTHER_REPOSITORY.value
+        ]))
+    generate_flask_template(project_name, dbDialect, db_host, db_user, db_pass, db_name, db_schema, repository_provider)
 
 
     
