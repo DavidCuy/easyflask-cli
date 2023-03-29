@@ -1,0 +1,56 @@
+name: Publish-to-pypi
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: 'environment to deploy'
+        required: true
+        options:
+          - prod
+jobs:
+  build:
+    name: Build and Deploy Artifacts
+    environment: "${{ github.event.inputs.environment }}"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          curl -sSL https://install.python-poetry.org | python3 -
+
+          poetry install
+          poetry build
+          sudo apt-get install zip
+          
+          zip -r artifacts.zip dist
+      - name: Upload Artifact to Deploy Job
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifact
+          path: artifacts.zip
+  deploy:
+    name: Deploy
+    if: ${{ github.event_name != 'pull_request' }}
+    needs: [ build ]
+    environment: "${{ github.event.inputs.environment }}"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          poetry install
+      - name: Deploy Project
+        run: |
+          poetry config pypi-token.pypi ${{ secrets.PIPY_API_TOKEN }}
+          poetry publish --build
