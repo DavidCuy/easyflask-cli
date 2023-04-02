@@ -16,7 +16,6 @@ def init_project():
     db_user = ""
     db_pass = ""
     db_name = ""
-    db_schema = ""
     project_name = typer.prompt("Nombre del proyecto")
     
     dbChoices = Choice([
@@ -47,8 +46,6 @@ def init_project():
             db_pass = get_random_string()
         else:
             db_pass = typer.prompt("Contraseña de la base de datos")
-    if dbDialect == "postgresql":
-        db_schema = typer.prompt("Nombre del esquema de base de datos")
     
     publish_enable = typer.confirm("¿Desea publicar en un repositorio de contenedores?")
     repository_provider = None
@@ -57,7 +54,7 @@ def init_project():
             Constants.AWS_REPOSITORY.value,
             Constants.OTHER_REPOSITORY.value
         ]))
-    generate_flask_template(project_name, dbDialect, db_host, db_user, db_pass, db_name, db_schema, docker_db_enable, repository_provider)
+    generate_flask_template(project_name, dbDialect, db_host, db_user, db_pass, db_name, docker_db_enable, repository_provider)
 
 
     
