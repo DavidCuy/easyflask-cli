@@ -16,6 +16,23 @@ class Constants(Enum):
     
     AWS_REPOSITORY = "aws"
     OTHER_REPOSITORY = "other"
+    
+    LOCALHOST_DB_DOCKER = "host.docker.internal"
+    MSSQL_SA_USER = "sa"
+
+DRIVERS = {
+    Constants.SQLITE_ENGINE.value: "sqlite",
+    Constants.SQLSERVER_ENGINE.value: "pyodbc",
+    Constants.MYSQL_ENGINE.value: "pymysql",
+    Constants.POSTGRESQL_ENGINE.value: "psycopg2"
+}
+
+SQL_PORTS_DEFAULT = {
+    Constants.SQLITE_ENGINE.value: "",
+    Constants.SQLSERVER_ENGINE.value: "1433",
+    Constants.MYSQL_ENGINE.value: "3306",
+    Constants.POSTGRESQL_ENGINE.value: "5432"
+}
 
 T = TypeVar("T")
 

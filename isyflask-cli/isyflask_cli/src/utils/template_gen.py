@@ -1,6 +1,6 @@
 from cookiecutter.main import cookiecutter
 from pathlib import Path
-from ...globals import Constants
+from ...globals import Constants, DRIVERS, SQL_PORTS_DEFAULT
 
 def generate_flask_template(project_name: str, db_dialect: str, db_host: str, db_user: str, db_pass: str, db_name: str, db_schema: str, docker_db: bool = False, repository_provider: str = None):
     """Descarga y configura el template de patron para flask
@@ -25,9 +25,13 @@ def generate_flask_template(project_name: str, db_dialect: str, db_host: str, db
         "db_pass": db_pass,
         "db_name": db_name,
         "db_schema": db_schema,
+        "_dbDriver": DRIVERS[db_schema],
+        "_db_port": SQL_PORTS_DEFAULT[db_schema],
         "docker_local_db_enable": docker_db,
         "repostory_provider": repository_provider
     }
+    if db_schema == Constants.POSTGRESQL_ENGINE.value:
+        config_override.update({"_db_extra_params": f"?options=-csearch_path%3D{db_schema}"})
     cookiecutter(
         Constants.FLASK_TEMPLATE.value,
         directory="code",

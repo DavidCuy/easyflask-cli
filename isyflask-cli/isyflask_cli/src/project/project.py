@@ -29,9 +29,16 @@ def init_project():
     
     if dbDialect != Constants.SQLITE_ENGINE.value:
         docker_db_enable = typer.confirm("¿Desea agregar configuracion de base de datos para desarrollo local en docker?")
-        db_host = typer.prompt("Host de la base de datos")
+        if docker_db_enable is False:
+            db_host = typer.prompt("Host de la base de datos")
+        else:
+            db_host = Constants.LOCALHOST_DB_DOCKER.value
         db_name = typer.prompt("Nombre de la base de datos")
-        db_user = typer.prompt("Usuario de la base de datos")
+        
+        if docker_db_enable is True and dbDialect == Constants.SQLSERVER_ENGINE.value:
+            db_user = Constants.MSSQL_SA_USER.value
+        else:
+            db_user = typer.prompt("Usuario de la base de datos")
         
         autopassword = False
         if docker_db_enable is True:
