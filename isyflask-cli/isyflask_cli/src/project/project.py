@@ -16,6 +16,7 @@ def init_project():
     db_user = ""
     db_pass = ""
     db_name = ""
+    docker_db_enable = False
     project_name = typer.prompt("Nombre del proyecto")
     
     dbChoices = Choice([
