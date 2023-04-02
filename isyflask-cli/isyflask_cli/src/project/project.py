@@ -57,7 +57,7 @@ def init_project():
             Constants.AWS_REPOSITORY.value,
             Constants.OTHER_REPOSITORY.value
         ]))
-    generate_flask_template(project_name, dbDialect, db_host, db_user, db_pass, db_name, db_schema, repository_provider)
+    generate_flask_template(project_name, dbDialect, db_host, db_user, db_pass, db_name, db_schema, docker_db_enable, repository_provider)
 
 
     
