@@ -25,8 +25,8 @@ def generate_flask_template(project_name: str, db_dialect: str, db_host: str, db
         "db_pass": db_pass,
         "db_name": db_name,
         "db_schema": db_schema,
-        "_dbDriver": DRIVERS[db_schema],
-        "_db_port": SQL_PORTS_DEFAULT[db_schema],
+        "_dbDriver": DRIVERS[db_dialect],
+        "_db_port": SQL_PORTS_DEFAULT[db_dialect],
         "docker_local_db_enable": docker_db,
         "repostory_provider": repository_provider
     }
