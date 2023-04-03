@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "isyflask-cli"
-version = "0.1.5"
+version = "0.1.6"
 description = "Un cli para manejar proyectos de API con flask"
 authors = ["David Cuy <david.cuy.sanchez@gmail.com>"]
 readme = "README.md"
