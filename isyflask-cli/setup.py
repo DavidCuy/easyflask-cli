@@ -22,7 +22,7 @@ entry_points = \
 
 setup_kwargs = {
     'name': 'isyflask-cli',
-    'version': '0.1.5',
+    'version': '0.1.6',
     'description': 'Un cli para manejar proyectos de API con flask.',
     'author': 'David Cuy',
     'author_email': 'david.cuy.sanchez@gmail.com',
