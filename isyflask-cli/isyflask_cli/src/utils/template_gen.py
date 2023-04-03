@@ -27,6 +27,7 @@ def generate_flask_template(project_name: str, db_dialect: str, db_host: str, db
         "_db_port": SQL_PORTS_DEFAULT[db_dialect],
         "docker_local_db_enable": docker_db,
         "repostory_provider": repository_provider,
+        "_db_extra_params": "?driver=FreeTDS" if db_dialect == Constants.SQLSERVER_ENGINE.value else ""
     }
     cookiecutter(
         Constants.FLASK_TEMPLATE.value,
