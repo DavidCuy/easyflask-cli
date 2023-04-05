@@ -5,12 +5,14 @@ from dotenv import load_dotenv
 
 from .src.project import project
 from .src.model import model
+from .src.configure import configure
 
 load_dotenv()
 
 app = typer.Typer()
 app.add_typer(project.app, name='project')
 app.add_typer(model.app, name='model')
+app.add_typer(configure.app, name='configure')
 
 
 @app.callback(invoke_without_command=True)
