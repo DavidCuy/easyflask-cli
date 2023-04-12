@@ -18,7 +18,12 @@ python -m venv venv
 source ./venv/Scripts/activate
 ````
 
-Posteriormente instale el cli
+## Instalacion
+Para instalar el CLI ejecute el siguiente comando
+
+```
+python -m pip install --upgrade pip
+```
 
 ````commandline
 pip install isyflask-cli
@@ -28,6 +33,7 @@ Para iniciar un proyecto ejecute el siguiente comando y responda las preguntas q
 
 ````commandline
 isyflask-cli project init
+cd <folder project name>
 pip install -r requirements.txt
 ````
 
