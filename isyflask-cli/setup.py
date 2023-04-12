@@ -18,7 +18,7 @@ install_requires = \
  'typer[all]>=0.5.0,<0.6.0']
 
 entry_points = \
-{'console_scripts': ['isyflask = isyflask_cli.cli:app']}
+{'console_scripts': ['isy = isyflask_cli.cli:app']}
 
 setup_kwargs = {
     'name': 'isyflask-cli',
