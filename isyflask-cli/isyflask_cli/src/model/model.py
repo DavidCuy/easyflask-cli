@@ -34,10 +34,15 @@ def new_model(name: str = typer.Option(..., help='Nombre del nuevo modelo.', pro
     add_file_to_module(routes_folder_path, f"{name}Router", f"{name.lower()}_router")
     
     index_code = Path(config.project.folders.root).joinpath('__init__.py').read_text()
-    index_code = index_code.replace("#replace this for add routes <-- NOT REMOVE THE COMMENT",
-                       f"from .routes import {name.lower()}_router\n    #replace this for add routes <-- NOT REMOVE THE COMMENT")
-    index_code = index_code.replace("#replace this for add blueprint <-- NOT REMOVE THE COMMENT",
-                       f"app.register_blueprint({name.lower()}_router, url_prefix='/{name.lower()}')\n    #replace this for add blueprint <-- NOT REMOVE THE COMMENT")
+
+    search_return = index_code.index('return app')
+
+    block_insert_code = f"""from .routes import {name.lower()}_router
+    app.register_blueprint({name.lower()}_router, url_prefix='/{name.lower()}')
+
+    """
+
+    index_code = index_code[:search_return] + block_insert_code + index_code[search_return:]
     Path(config.project.folders.root).joinpath('__init__.py').write_text(index_code)
 
     typer.echo(f'{name} se agrego correctamente!', color=typer.colors.GREEN)

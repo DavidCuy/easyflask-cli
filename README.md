@@ -177,6 +177,18 @@ El encarpetado final será algo similar a lo que se muestra acontinuación, esto
 └── requirements.txt
 ```
 
+Para el desarrollo local con poetry, solo hay que agregar las siguientes líneas a tu archivo `isyflask_project.toml`:
+
+```
+...
+...
+...
+[tool.poetry.dependencies]
+isyflask = { path = "<relative_path_to_project>/isyflask_cli", develop = true }
+```
+
+
+
 ```isy model new```
 
 Con este comando se creará el modelo para la definicion del proyecto, por lo que creará el servicio, el controlador y el ruteo correspondiente.

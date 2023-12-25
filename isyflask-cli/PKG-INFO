@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: isyflask-cli
-Version: 0.1.8
+Version: 0.1.9
 Summary: Un cli para manejar proyectos de API con flask
 Author: David Cuy
 Author-email: david.cuy.sanchez@gmail.com
