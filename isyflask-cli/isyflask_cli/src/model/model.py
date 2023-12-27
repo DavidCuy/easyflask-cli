@@ -9,14 +9,15 @@ from pathlib import Path
 app = typer.Typer()
 
 @app.command('new')
-def new_model(name: str = typer.Option(..., help='Nombre del nuevo modelo.', prompt=True)):
+def new_model(name: str = typer.Option(..., help='Nombre del nuevo modelo.'), tablename: str = typer.Option(help='Nombre de la tabla', default='same-model-name')):
     config = load_config()
     name = camel_case(name)
+    tablename = camel_case(name if tablename == 'same-model-name' else tablename)
     models_folder_path = Path(config.project.folders.models)
-    validate_path_not_exist(path=models_folder_path.joinpath(name), custom_error_message=f'Ya existe un modelo con nombre: {name}')
+    validate_path_not_exist(path=models_folder_path.joinpath(f'{name}.py'), custom_error_message=f'Ya existe un modelo con nombre: {name}')
 
     template_model_path = Path(config.template.files.model)
-    add_code_to_module(template_model_path, models_folder_path, name, {'model_name': name, 'model_name_lower': name.lower()})
+    add_code_to_module(template_model_path, models_folder_path, name, {'model_name': name, 'model_name_lower': name.lower(), 'table_name': tablename})
     add_file_to_module(models_folder_path, name)
     
     service_template_path = Path(config.template.files.service)
