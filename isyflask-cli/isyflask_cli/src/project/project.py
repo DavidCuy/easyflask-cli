@@ -8,7 +8,7 @@ from click.types import Choice
 app = typer.Typer()
 
 @app.command('init')
-def init_project():
+def init_project(pattern_version: str = typer.Option(help='Version del patron de flask.', default='latest')):
     """
     Genera un nuevo proyecto con template para flask
     """
@@ -55,7 +55,7 @@ def init_project():
             Constants.AWS_REPOSITORY.value,
             Constants.OTHER_REPOSITORY.value
         ]))
-    generate_flask_template(project_name, dbDialect, db_host, db_user, db_pass, db_name, docker_db_enable, repository_provider)
+    generate_flask_template(project_name, dbDialect, db_host, db_user, db_pass, db_name, docker_db_enable, repository_provider, pattern_version)
 
 
     
