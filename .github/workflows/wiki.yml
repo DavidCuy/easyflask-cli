@@ -45,8 +45,10 @@ jobs:
         run: |
           ls
           rm -r markdown/*
+          mv wiki.zip markdown/wiki.zip
           cd markdown
           unzip wiki.zip
+          rm wiki.zip
           ls
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
