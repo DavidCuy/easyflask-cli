@@ -43,10 +43,9 @@ jobs:
             name: wikiZip
       - name: Push to wiki
         run: |
-          unzip wiki.zip
           ls
           rm -r markdown/
-          cp -r . markdown/
+          unzip wiki.zip
           cd markdown
           ls
           git config --local user.email "action@github.com"
