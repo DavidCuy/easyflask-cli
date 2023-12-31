@@ -1,0 +1,55 @@
+name: Wiki
+on:
+    push:
+        branches:
+          - feature/endpoints
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  uploadWikiFile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: ZipWikiFiles
+        run: |
+          cd wiki
+          zip -r wiki.zip .
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: wikiZip
+          path: wiki/wiki.zip
+
+  updateWiki:
+    needs: [uploadWikiFile]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout base code
+        uses: actions/checkout@v3
+        with:
+          path: base-code
+      - name: Checkout wiki code
+        uses: actions/checkout@v3
+        with:
+          repository: ${{github.repository}}.wiki
+          path: markdown
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+            name: wikiZip
+      - name: Push to wiki
+        run: |
+          unzip wiki.zip
+          ls
+          rm -r markdown/
+          cp -r . markdown/
+          cd markdown
+          ls
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git diff-index --quiet HEAD || git commit -m "Add changes" && git push
