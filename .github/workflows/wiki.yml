@@ -44,7 +44,7 @@ jobs:
       - name: Push to wiki
         run: |
           ls
-          rm -r markdown/
+          rm -r markdown/*
           cd markdown
           unzip wiki.zip
           ls
