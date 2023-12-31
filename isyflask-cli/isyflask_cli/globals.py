@@ -104,6 +104,11 @@ class Files(BaseConf):
     service: str
     controller: str
     endpoint: str
+    
+    serviceEndpointConf: str
+    controllerEndpointConf: str
+    endpointConf: str
+
 
 @dataclass
 class Folders(BaseConf):
@@ -152,6 +157,7 @@ class Config(BaseConf):
         template = Template.from_dict(obj.get("template"))
         return Config(project, template)
 
+
 def load_config(path="isyflask_project.toml") -> Config:
     config_path = Path(path)
     if not config_path.exists():
@@ -167,6 +173,9 @@ model = "templates/isyflask/model.txt"
 service = "templates/isyflask/service.txt"
 controller = "templates/isyflask/controller.txt"
 endpoint = "templates/isyflask/routes.txt"
+serviceEndpointConf = "templates/isyflask/endpoints/service.txt"
+controllerEndpointConf = "templates/isyflask/endpoints/controller.txt"
+endpointConf = "templates/isyflask/endpoints/routes.txt"
 
 [isyflask.project.folders]
 root = "api"
