@@ -89,6 +89,17 @@ En esta herramienta, se mezcló el uso principal de estas librerías, por lo que
 * [Alembic](https://alembic.sqlalchemy.org/en/latest/)
 * [Blueprint](https://flask.palletsprojects.com/en/1.1.x/blueprints/)
 
+## Nota para los desarrolladores
+
+Para el desarrollo local con poetry, solo hay que agregar las siguientes líneas a tu archivo `isyflask_project.toml`:
+
+```
+...
+...
+...
+[tool.poetry.dependencies]
+isyflask = { path = "<relative_path_to_project>/isyflask_cli", develop = true }
+```
 
 ## Comandos
 Para más información de los comandos, revisa la [Wiki](https://github.com/DavidCuy/easyflask-cli/wiki/)

@@ -7,13 +7,21 @@ Este subcomando es utilizado el manejo de los modelos para la base de datos del 
 └── isy
     └── model
         └── new
+        └── fromJson
+```
+
+```isy model new```
+
+```
+.
+└── isy
+    └── model
+        └── new
 
 Arguments:
 - name: Nombre del nuevo modelo.
 - tablename: Nombre de la tabla. Default='same-model-name'
 ```
-
-```isy model new```
 
 Con este comando se creará el modelo para la definicion del proyecto, por lo que creará el servicio, el controlador y el ruteo correspondiente.
 
@@ -31,6 +39,24 @@ Así como moficar los siguientes archivos para el import y ruteo correspondiente
 * api/app/Controllers/__ init__.py
 * api/routes/__ init__.py
 * api/__ init__.py
+
+
+```isy model fromJson```
+
+```
+.
+└── isy
+    └── model
+        └── fromJson
+
+Arguments:
+- name: Nombre del nuevo modelo.
+- tablename: Nombre de la tabla. Default='same-model-name'
+```
+
+Con este comando se creará el modelo para la definicion del proyecto, por lo que creará el servicio, el controlador y el ruteo correspondiente. Además de hacer el mapeo de las columnas para la base de datos a partir del archivo JSON con el nombre del modelo indicado que se encuentre en la ruta `templates/isyflask/json`
+
+Se realizan las mismas afectaciones que en el comando: `isy model new`
 
 ## Modelos, la base de todo
 
@@ -114,6 +140,8 @@ class ModelName(BaseModel):
         pass
 ```
 
+
+
 ## Ejemplos y afectaciones
 
 ```isy model new  --name=Example```
@@ -167,5 +195,32 @@ erDiagram
 erDiagram
     People {
         int id
+    }
+```
+
+```isy model fromJson --name=animal```
+
+Json `templates/isyflask/json/Animal.json` de entrada:
+
+```json
+{
+    "name": "Local",
+    "type": "Cow",
+    "legs": 4,
+    "weigth": 127.45,
+    "born": "2020-01-01"
+}
+```
+
+Output Diagram:
+
+```mermaid
+erDiagram
+    Animal {
+        int id
+        string name
+        int legs
+        float weigth
+        datetime born
     }
 ```

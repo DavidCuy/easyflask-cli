@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, TypeVar, Type, cast, Callable, List
 import typer
 import toml
+import datetime
 from dotenv import load_dotenv
 
 class Constants(Enum):
@@ -20,6 +21,12 @@ class Constants(Enum):
     LOCALHOST_DB_DOCKER = "host.docker.internal"
     MSSQL_SA_USER = "sa"
 
+    VALID_MODEL_TYPES = (int, str, float, datetime.datetime)
+    JSON_INT_DTYPE = 'int'
+    JSON_FLOAT_DTYPE = 'float'
+    JSON_STRING_DTYPE = 'str'
+    JSON_DATETIME_DTYPE = 'datetime'
+
 DRIVERS = {
     Constants.SQLITE_ENGINE.value: "sqlite",
     Constants.SQLSERVER_ENGINE.value: "pyodbc",
@@ -32,6 +39,13 @@ SQL_PORTS_DEFAULT = {
     Constants.SQLSERVER_ENGINE.value: "1433",
     Constants.MYSQL_ENGINE.value: "3306",
     Constants.POSTGRESQL_ENGINE.value: "5432"
+}
+
+JSON_MAPPING_VALUE = {
+    Constants.JSON_INT_DTYPE.value: 'Column("{ColumnName}", Integer)',
+    Constants.JSON_STRING_DTYPE.value: 'Column("{ColumnName}", String)',
+    Constants.JSON_FLOAT_DTYPE.value: 'Column("{ColumnName}", Float)',
+    Constants.JSON_DATETIME_DTYPE.value: 'Column("{ColumnName}", DateTime)'
 }
 
 T = TypeVar("T")
@@ -117,6 +131,7 @@ class Folders(BaseConf):
     controllers: str
     endpoints: str
     root: str
+    jsons: str
 
 @dataclass
 class Definition(BaseConf):
@@ -183,6 +198,7 @@ models = "api/app/Data/Models"
 services = "api/app/Services"
 controllers = "api/app/Controllers"
 endpoints = "api/routes"
+jsons = "templates/isyflask/json"
         """)
         typer.echo(
             f"Created config file at {config_path} in this path you can find all configuration for the project here.")
