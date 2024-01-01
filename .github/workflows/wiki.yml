@@ -2,7 +2,7 @@ name: Wiki
 on:
     push:
         branches:
-          - feature/endpoints
+          - main
 permissions:
   id-token: write
   contents: write
