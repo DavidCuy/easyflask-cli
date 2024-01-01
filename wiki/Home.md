@@ -9,6 +9,7 @@ El arbol general del los comandos se muestra acontinuación.
     │   └── init
     └── model
     │   └── new
+    │   └── fromJson
     └── endpoint
         └── new
 ```
@@ -38,7 +39,8 @@ El subcomando *model* es utilizado el manejo de los modelos para la base de dato
 .
 └── isy
     └── model
-        └── new
+    │   └── new
+    │   └── fromJson
 
 Arguments:
 - name: Nombre del nuevo modelo.
