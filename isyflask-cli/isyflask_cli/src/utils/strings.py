@@ -15,6 +15,19 @@ def camel_case(s: str):
     s = sub(r"(_|-)+", " ", s).title().replace(" ", "")
     return ''.join([s[0].upper(), s[1:]])
 
+def snake_case(s: str):
+    """
+    Convierte un string a su notación snake_case
+
+    Args:
+        s (str): String de entrada
+
+    Returns:
+        str: String en formato snake_case
+    """
+    s = sub(r"(_|-)+", " ", s).lower().replace(" ", "_")
+    return ''.join([s[0].upper(), s[1:]])
+
 def get_random_string(length = 16):
     """
     Genera una cadena random de longitud variable

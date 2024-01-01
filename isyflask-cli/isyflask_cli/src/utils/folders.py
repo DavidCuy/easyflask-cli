@@ -5,7 +5,7 @@ from typing import Optional
 import typer
 
 
-def validate_path_not_exist(*, path: Path, custom_error_message: Optional[str] = None):
+def validate_path_not_exist(*, path: Path, custom_error_message: Optional[str] = None, abort=True):
     """
     Validate that not exist a folder in case where path was found it raise a exception and abort the execution.
     :param path: A path for validate
@@ -13,8 +13,11 @@ def validate_path_not_exist(*, path: Path, custom_error_message: Optional[str] =
     :return:
     """
     if path.exists():
-        typer.echo(custom_error_message or f'Ya existe un archivo: {path}', typer.colors.RED)
-        raise typer.Abort()
+        typer.echo(custom_error_message or f'Ya existe un archivo: {path}', color=typer.colors.RED)
+        if abort:
+            raise typer.Abort()
+        return True
+    return False
 
 
 def validate_path_exist(*, path: Path, custom_error_message: Optional[str] = None):

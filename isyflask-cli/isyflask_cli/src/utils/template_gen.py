@@ -1,8 +1,9 @@
+import pkg_resources
 from cookiecutter.main import cookiecutter
 from pathlib import Path
 from ...globals import Constants, DRIVERS, SQL_PORTS_DEFAULT
 
-def generate_flask_template(project_name: str, db_dialect: str, db_host: str, db_user: str, db_pass: str, db_name: str, docker_db: bool = False, repository_provider: str = None):
+def generate_flask_template(project_name: str, db_dialect: str, db_host: str, db_user: str, db_pass: str, db_name: str, docker_db: bool = False, repository_provider: str = None, pattern_version = 'latest'):
     """Descarga y configura el template de patron para flask
 
     Args:
@@ -29,13 +30,15 @@ def generate_flask_template(project_name: str, db_dialect: str, db_host: str, db
         "repostory_provider": repository_provider,
         "_db_extra_params": "?driver=FreeTDS" if db_dialect == Constants.SQLSERVER_ENGINE.value else ""
     }
-    cookiecutter(
-        Constants.FLASK_TEMPLATE.value,
-        directory="code",
-        overwrite_if_exists=True,
-        no_input=True,
-        extra_context=config_override
-    )
+    cookiecutter_kwargs = {
+        "directory": "code",
+        "overwrite_if_exists": True,
+        "no_input": True,
+        "extra_context": config_override
+    }
+    if pattern_version != 'latest':
+        cookiecutter_kwargs.update({"checkout": pattern_version})
+    cookiecutter(Constants.FLASK_TEMPLATE.value, **cookiecutter_kwargs)
 
 def add_code_to_module(template_path: Path, module_path: Path, modelName: str, code_format_override: dict):
     module_code = template_path.read_text().format(**code_format_override)
