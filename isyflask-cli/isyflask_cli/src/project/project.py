@@ -2,8 +2,11 @@ from ...globals import Constants
 from ..utils.template_gen import generate_flask_template
 from ..utils.strings import get_random_string
 
+import os
+import json
 import typer
 from click.types import Choice
+from pathlib import Path
 
 app = typer.Typer()
 
@@ -56,6 +59,22 @@ def init_project(pattern_version: str = typer.Option(help='Version del patron de
             Constants.OTHER_REPOSITORY.value
         ]))
     generate_flask_template(project_name, dbDialect, db_host, db_user, db_pass, db_name, docker_db_enable, repository_provider, pattern_version)
+
+    package_path = Path(__file__).parent.parent.parent
+    local_project_dir = package_path.joinpath('projects_config').joinpath(project_name)
+    if not local_project_dir.exists():
+        os.mkdir(local_project_dir)
+    
+    with open(local_project_dir.joinpath('project.json'), 'w') as f:
+        json.dump({
+            "project_name": project_name,
+            "dbDialect": dbDialect,
+            "docker_db_enable": docker_db_enable,
+            "repository_provider": repository_provider,
+            "pattern_version": pattern_version
+        }, f)
+    
+
 
 
     
