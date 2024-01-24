@@ -61,7 +61,7 @@ def new_endpoint(
                     pass
 
             full_column_text += f"""
-    {snake_case(key)} = {JSON_MAPPING_VALUE[key_type].format(**{'ColumnName': camel_case(key)})}"""
+    {key} = {JSON_MAPPING_VALUE[key_type].format(**{'ColumnName': camel_case(key)})}"""
             full_propmap_text += f""",
             "{key}": "{camel_case(key)}\""""
             full_display_member += f""",
