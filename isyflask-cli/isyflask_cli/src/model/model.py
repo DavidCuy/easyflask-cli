@@ -8,6 +8,7 @@ import typer
 from typing import cast
 from pathlib import Path
 from dateutil import parser
+from typing_extensions import Annotated
 
 app = typer.Typer()
 
@@ -30,6 +31,9 @@ def new_endpoint(
         name: str = typer.Option(..., help='Nombre del archivo JSON a leer. Sin extension'),
         tablename: str = typer.Option(help='Nombre de la tabla', default='same-model-name')
     ):
+    """
+    Crea un nuevo modelo de acuerdo con el nombre especificado y el archivo en la ruta "./templates/isyflask/json"
+    """
     config = load_config()
     name = camel_case(name)
     tablename = camel_case(name if tablename == 'same-model-name' else tablename)
