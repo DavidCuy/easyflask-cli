@@ -5,6 +5,7 @@ from ..utils.strings import get_random_string
 import os
 import json
 import typer
+from typing import cast
 from click.types import Choice
 from pathlib import Path
 
@@ -51,17 +52,9 @@ def init_project(pattern_version: str = typer.Option(help='Version del patron de
         else:
             db_pass = typer.prompt("Contraseña de la base de datos")
     
-    publish_enable = typer.confirm("¿Desea publicar en un repositorio de contenedores?")
-    repository_provider = None
-    if publish_enable:
-        repository_provider: Choice = typer.prompt("Elija el proveedor de registro de contenedor", "aws", show_choices=True, type=Choice([
-            Constants.AWS_REPOSITORY.value,
-            Constants.OTHER_REPOSITORY.value
-        ]))
-    generate_flask_template(project_name, dbDialect, db_host, db_user, db_pass, db_name, docker_db_enable, repository_provider, pattern_version)
+    generate_flask_template(project_name, dbDialect, db_host, db_user, db_pass, db_name, docker_db_enable, pattern_version)
 
-    package_path = Path(__file__).parent.parent.parent
-    local_project_dir = package_path.joinpath('projects_config').joinpath(project_name)
+    local_project_dir = Path(os.getcwd()).joinpath(project_name).joinpath('.isy')
     if not local_project_dir.exists():
         os.mkdir(local_project_dir)
     
@@ -70,12 +63,24 @@ def init_project(pattern_version: str = typer.Option(help='Version del patron de
             "project_name": project_name,
             "dbDialect": dbDialect,
             "docker_db_enable": docker_db_enable,
-            "repository_provider": repository_provider,
             "pattern_version": pattern_version
         }, f)
     
 
+@app.command('configure')
+def read_config():
+    local_project_dir = Path(os.getcwd()).joinpath('.isy')
 
-
+    try:
+        with open(local_project_dir.joinpath('project.json'), 'r') as f:
+            project_config = cast(dict, json.load(f))
+    except:
+        typer.echo('No se puedo leer la configuracion del proyecto', color=typer.colors.RED)
+        raise typer.Abort()
     
+    output_str = ""
+    for key in project_config.keys():
+        output_str += f"{key} = {project_config[key]}\n"
+    
+    typer.echo(output_str)
 

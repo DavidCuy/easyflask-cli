@@ -7,6 +7,7 @@ Este subcomando es utilizado para realizar tareas y afectaciones generales para 
 └── isy
     ├── project
     │   └── init
+    │   └── configure
 ```
 
 ## Init
@@ -108,3 +109,6 @@ El encarpetado final será algo similar a lo que se muestra acontinuación, esto
 ├── README.md
 └── requirements.txt
 ```
+
+```isy project configure```
+Imprime en consola la configuración actual del proyecto de isy.

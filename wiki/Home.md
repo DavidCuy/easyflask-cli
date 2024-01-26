@@ -7,6 +7,7 @@ El arbol general del los comandos se muestra acontinuación.
 └── isy
     ├── project
     │   └── init
+    │   └── configure
     └── model
     │   └── new
     │   └── fromJson
