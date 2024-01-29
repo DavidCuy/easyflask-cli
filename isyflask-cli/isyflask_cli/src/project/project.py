@@ -1,5 +1,5 @@
 from ...globals import Constants
-from ..utils.template_gen import generate_flask_template
+from ..utils.template_gen import generate_flask_template, read_project_config
 from ..utils.strings import get_random_string
 
 import os
@@ -9,6 +9,7 @@ import typer
 from typing import cast
 from click.types import Choice
 from pathlib import Path
+from shutil import which
 
 app = typer.Typer()
 
@@ -70,11 +71,8 @@ def init_project(pattern_version: str = typer.Option(help='Version del patron de
 
 @app.command('configure')
 def read_config():
-    local_project_dir = Path(os.getcwd()).joinpath('.isy')
-
     try:
-        with open(local_project_dir.joinpath('project.json'), 'r') as f:
-            project_config = cast(dict, json.load(f))
+        project_config = read_project_config()
     except:
         typer.echo('No se puedo leer la configuracion del proyecto', color=typer.colors.RED)
         raise typer.Abort()
@@ -105,15 +103,38 @@ def db_migrate(apply_at_db: bool = typer.Option(help='Indica si se aplica la mig
 
 
 @app.command('run')
-def run_app(method: str = typer.Option(help='Método para levantar la aplicación', default='flask-run')):
-    python_path = __get_venv_python_path()
+def run_app(
+        method: str = typer.Option(help='Método para levantar la aplicación', default='flask-run'),
+        only_docker_app: bool = typer.Option(help='Indica si solo se levanta la app usando docker', default=False)):
+    if only_docker_app and not (method == 'docker'):
+        typer.echo('Solo se puede usar "only-docker-app" seleccionando docker como método de ejecución')
+        raise typer.Abort()
+    try:
+        project_config = read_project_config()
+    except:
+        typer.echo('No se puedo leer la configuracion del proyecto', color=typer.colors.RED)
+        raise typer.Abort()
     if method == 'flask-run':
+        python_path = __get_venv_python_path()
         __set_flask_env()
 
         os.system(f'{python_path} -m flask run --host=0.0.0.0')
 
     elif method == 'docker':
-        pass
+        # TODO: !!!!!! IMPORTANTE !!!!!!! leer archivo de docker y crear uno temporal,
+        # TODO: !!!!!! IMPORTANTE !!!!!!! ejecutar sólo el archivo temporal modificando lo necesario para trabajar usando docker-py
+        # TODO: !!!!!! IMPORTANTE !!!!!!! eliminarlo cuando se cierra la sessión, volverlo a reescribir si existe
+        if which('docker-compose') is None:
+            typer.echo('No se encuentra el comando docker-compose instalado en el equipo', color=typer.colors.RED)
+            typer.Abort()
+        try:
+            extra_params = ''
+            if only_docker_app:
+                project_name = str(project_config["project_name"]).lower().replace(' ', '').replace('-', '').replace('_', '')
+                extra_params = f'{project_name} -e DB_HOST=localhost'
+            os.system(f'docker-compose up {extra_params}')
+        except KeyboardInterrupt:
+            os.system('docker-compose down')
     else:
         typer.echo('El método especificado no está permitido [flask-run, docker]')
 
