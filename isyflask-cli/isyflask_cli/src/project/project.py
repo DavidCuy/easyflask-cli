@@ -3,6 +3,7 @@ from ..utils.template_gen import generate_flask_template
 from ..utils.strings import get_random_string
 
 import os
+import sys
 import json
 import typer
 from typing import cast
@@ -84,3 +85,53 @@ def read_config():
     
     typer.echo(output_str)
 
+
+@app.command('install')
+def install_project():
+    python_path = __get_venv_python_path()
+    typer.echo('Instalando bibliotecas')
+    os.system(f'{python_path} -m pip install -r requirements.txt')
+            
+
+
+@app.command('migrate')
+def db_migrate(apply_at_db: bool = typer.Option(help='Indica si se aplica la migración en la db', default=False)):
+    python_path = __get_venv_python_path()
+    __set_flask_env()
+    os.system(f'{python_path} -m flask db migrate')
+
+    if apply_at_db:
+        os.system(f'{python_path} -m flask db upgrade')
+
+
+@app.command('run')
+def run_app(method: str = typer.Option(help='Método para levantar la aplicación', default='flask-run')):
+    python_path = __get_venv_python_path()
+    if method == 'flask-run':
+        __set_flask_env()
+
+        os.system(f'{python_path} -m flask run --host=0.0.0.0')
+
+    elif method == 'docker':
+        pass
+    else:
+        typer.echo('El método especificado no está permitido [flask-run, docker]')
+
+
+def __set_flask_env():
+    os.environ['FLASK_APP'] = 'api'
+    os.environ['FLASK_RUN_HOST'] = '0.0.0.0'
+    os.environ['FLASK_ENV'] = 'development'
+
+
+def __verify_venv():
+    if sys.prefix != sys.base_prefix:
+        typer.echo('No se reconocio ambiente virtual')
+        if not Path.exists(Path(os.getcwd()).joinpath('venv')):
+            typer.echo('No se encontró carpeta de ambiente virtual')
+            os.system('python -m venv venv')
+
+
+def __get_venv_python_path():
+    __verify_venv()
+    return '.\\venv\\Scripts\\python' if sys.platform.lower().startswith('win') else './venv/bin/python'
