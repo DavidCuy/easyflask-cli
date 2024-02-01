@@ -1,6 +1,7 @@
 from ...globals import Constants
 from ..utils.template_gen import generate_flask_template, read_project_config
 from ..utils.strings import get_random_string
+from ..utils.docker import save_compose_file, load_compose_file, clean_just_app_service, clean_entrypoint, delete_compose_file
 
 import os
 import sys
@@ -105,9 +106,13 @@ def db_migrate(apply_at_db: bool = typer.Option(help='Indica si se aplica la mig
 @app.command('run')
 def run_app(
         method: str = typer.Option(help='Método para levantar la aplicación', default='flask-run'),
-        only_docker_app: bool = typer.Option(help='Indica si solo se levanta la app usando docker', default=False)):
-    if only_docker_app and not (method == 'docker'):
+        only_project_app: bool = typer.Option(help='Indica si solo se levanta la app usando docker', default=False),
+        rebuild_docker: bool = typer.Option(help='Indica si solo se construye la app usando docker', default=False)):
+    if only_project_app and not (method == 'docker'):
         typer.echo('Solo se puede usar "only-docker-app" seleccionando docker como método de ejecución')
+        raise typer.Abort()
+    if rebuild_docker and not (method == 'docker'):
+        typer.echo('Solo se puede usar "rebuild_docker" seleccionando docker como método de ejecución')
         raise typer.Abort()
     try:
         project_config = read_project_config()
@@ -121,20 +126,25 @@ def run_app(
         os.system(f'{python_path} -m flask run --host=0.0.0.0')
 
     elif method == 'docker':
-        # TODO: !!!!!! IMPORTANTE !!!!!!! leer archivo de docker y crear uno temporal,
-        # TODO: !!!!!! IMPORTANTE !!!!!!! ejecutar sólo el archivo temporal modificando lo necesario para trabajar usando docker-py
-        # TODO: !!!!!! IMPORTANTE !!!!!!! eliminarlo cuando se cierra la sessión, volverlo a reescribir si existe
         if which('docker-compose') is None:
             typer.echo('No se encuentra el comando docker-compose instalado en el equipo', color=typer.colors.RED)
             typer.Abort()
         try:
-            extra_params = ''
-            if only_docker_app:
-                project_name = str(project_config["project_name"]).lower().replace(' ', '').replace('-', '').replace('_', '')
-                extra_params = f'{project_name} -e DB_HOST=localhost'
-            os.system(f'docker-compose up {extra_params}')
+            extra_params = ' --build'
+            output_docker_filename = 'docker-compose.yml'
+            if only_project_app:
+                docker_file = load_compose_file()
+                if docker_file is None:
+                    raise Exception('Can not read docker-compose file')
+                docker_file = clean_just_app_service(docker_file, project_config["project_name"])
+                output_docker_filename = 'docker-compose.isy.yml'
+                save_compose_file(docker_file, output_docker_filename)
+            #clean_entrypoint()
+            os.system(f'docker-compose -f {output_docker_filename} up {extra_params}')
         except KeyboardInterrupt:
             os.system('docker-compose down')
+            if only_project_app:
+                delete_compose_file()
     else:
         typer.echo('El método especificado no está permitido [flask-run, docker]')
 

@@ -56,3 +56,11 @@ def rename_path(*, src: Path, dst: Path):
     :return:
     """
     os.rename(src, dst)
+
+
+def delete_file(*, src: Path):
+    """
+    Delete a specific path
+    :param src:
+    """
+    os.remove(src)
