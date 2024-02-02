@@ -53,7 +53,7 @@ def init_project(pattern_version: str = typer.Option(help='Version del patron de
         if autopassword is True:
             db_pass = get_random_string()
         else:
-            db_pass = typer.prompt("Contraseña de la base de datos")
+            db_pass = typer.prompt("Contraseña de la base de datos", hide_input=True)
     
     generate_flask_template(project_name, dbDialect, db_host, db_user, db_pass, db_name, docker_db_enable, pattern_version)
 

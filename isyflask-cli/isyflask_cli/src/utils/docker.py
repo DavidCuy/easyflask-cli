@@ -1,6 +1,10 @@
+import os
 import yaml
 import typer
+import json
 from typing import cast
+from shutil import which
+from pathlib import Path
 from .folders import delete_file
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
@@ -54,3 +58,46 @@ def clean_entrypoint(path='./entrypoint.sh'):
         typer.echo(new_text)
     except Exception as e:
         typer.echo(e, color=typer.colors.RED)    
+
+def verify_docker_install():
+    if which('docker') is None:
+        typer.echo('No se encuentra el comando docker instalado en el equipo', color=typer.colors.RED)
+        typer.Abort()
+        raise Exception('Docker not installed')
+    if which('docker-compose') is None:
+        typer.echo('No se encuentra el comando docker-compose instalado en el equipo', color=typer.colors.RED)
+        typer.Abort()
+        raise Exception('docker-compose not installed')
+
+
+def read_docker_config():
+    local_project_dir = Path(os.getcwd()).joinpath('.isy')
+    if not local_project_dir.joinpath('docker-prop.info').exists():
+        return None
+    try:
+        with open(local_project_dir.joinpath('docker-prop.info'), 'r') as f:
+            json_file = json.loads(f.read())
+    except:
+        return None
+    return json_file
+
+
+def get_cmd_login(pass_from_file: bool) -> str:
+    docker_config = read_docker_config()
+    if docker_config is None:
+        raise Exception('Error at read docker-config file')
+    is_docker_hub = docker_config['is_dockerhub']
+    docker_server = docker_config['server']
+    docker_user = docker_config['user']
+
+    docker_pass = ''
+    if pass_from_file:
+        if not Path('docker-pass.secret').exists():
+            typer.Abort()
+            raise Exception('No se encuentra el archivo docker-pass.secret')
+        with open('docker-pass.secret', 'r') as f:
+            docker_pass = f.read()
+    else:
+        docker_pass = typer.prompt("Contraseña de host remoto", hide_input=True)
+
+    return f'docker login {docker_server if not is_docker_hub else ""} -u {docker_user} -p {docker_pass}'
