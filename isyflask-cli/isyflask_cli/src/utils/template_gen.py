@@ -1,4 +1,6 @@
-import pkg_resources
+import os
+import json
+from typing import cast
 from cookiecutter.main import cookiecutter
 from pathlib import Path
 from ...globals import Constants, DRIVERS, SQL_PORTS_DEFAULT
@@ -48,3 +50,14 @@ def add_file_to_module(module_path: Path, modelName: str, replace_import: str = 
     module_text += f"\nfrom .{modelName} import {modelName}" if replace_import is None else f"\nfrom .{modelName} import {replace_import}"
     module_path.joinpath('__init__.py').write_text(module_text)
 
+
+def read_project_config():
+    local_project_dir = Path(os.getcwd()).joinpath('.isy')
+
+    try:
+        with open(local_project_dir.joinpath('project.json'), 'r') as f:
+            project_config = cast(dict, json.load(f))
+    except Exception as e:
+        raise e
+    
+    return project_config

@@ -1,7 +1,7 @@
 from ...globals import load_config, Config, Constants, JSON_MAPPING_VALUE
 from ..utils.folders import validate_path_not_exist, validate_path_exist
 from ..utils.strings import camel_case, snake_case
-from ..utils.template_gen import add_code_to_module, add_file_to_module
+from ..utils.template_gen import add_code_to_module, add_file_to_module, read_project_config
 
 import json
 import typer
@@ -35,6 +35,11 @@ def new_endpoint(
     Crea un nuevo modelo de acuerdo con el nombre especificado y el archivo en la ruta "./templates/isyflask/json"
     """
     config = load_config()
+    try:
+        project_config = read_project_config()
+    except:
+        typer.echo('No se puedo leer la configuracion del proyecto', color=typer.colors.RED)
+        raise typer.Abort()
     name = camel_case(name)
     tablename = camel_case(name if tablename == 'same-model-name' else tablename)
     json_folder_path = Path(config.project.folders.jsons)
@@ -64,8 +69,13 @@ def new_endpoint(
                     # 'String is not datetime format'
                     pass
 
-            full_column_text += f"""
+            data_column_line_text = f"""
     {key} = {JSON_MAPPING_VALUE[key_type].format(**{'ColumnName': camel_case(key)})}"""
+            #here replace
+            if key_type == Constants.JSON_STRING_DTYPE.value:
+                if project_config['dbDialect'] == Constants.MYSQL_ENGINE.value:
+                    data_column_line_text = data_column_line_text.replace('String', 'String(512)')
+            full_column_text += data_column_line_text
             full_propmap_text += f""",
             "{key}": "{camel_case(key)}\""""
             full_display_member += f""",

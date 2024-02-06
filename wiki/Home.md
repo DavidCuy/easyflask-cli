@@ -8,11 +8,22 @@ El arbol general del los comandos se muestra acontinuación.
     ├── project
     │   └── init
     │   └── configure
+    │   └── install
+    │   └── migrate
+    │   └── run
     └── model
     │   └── new
     │   └── fromJson
     └── endpoint
-        └── new
+    │   └── new
+    └── docker
+    |   └── list
+    |   └── up
+    |   └── down
+    |   └── up-db
+    |   └── configure-remote
+    |   └── build-app
+    |   └── push-app
 ```
 
 Para ver la lista de comandos de su version, puede ejecutar el comando:
@@ -32,6 +43,10 @@ El subcomando *project* es utilizado para realizar tareas y afectaciones general
 └── isy
     ├── project
     │   └── init
+    │   └── configure
+    │   └── install
+    │   └── migrate
+    │   └── run
 ```
 
 El subcomando *model* es utilizado el manejo de los modelos para la base de datos del proyecto.
@@ -61,3 +76,19 @@ Arguments:
 - path: Path del endpoint
 - model_name: Nombre de un modelo existente. Si no existe, crea el service, controller y router correspondiente. Default=''
 ```
+
+El subcomando *docker* es utilizado el manejo del projecto utilizando docker, así como la sincronización remota.
+
+```
+.
+└── isy
+    └── docker
+    |   └── list
+    |   └── up
+    |   └── down
+    |   └── up-db
+    |   └── configure-remote
+    |   └── build-app
+    |   └── push-app
+```
+

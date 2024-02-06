@@ -10,7 +10,7 @@ Este subcomando es utilizado para realizar tareas y afectaciones generales para 
     │   └── configure
 ```
 
-## Init
+## Project commands
 
 ```isy project init```
 
@@ -111,4 +111,58 @@ El encarpetado final será algo similar a lo que se muestra acontinuación, esto
 ```
 
 ```isy project configure```
-Imprime en consola la configuración actual del proyecto de isy.
+
+```
+.
+└── isy
+    └── project
+        └── configure
+```
+
+Imprime en consola la configuración actual del proyecto de isy. La salida de la consola debe ser similar a:
+
+```
+project_name = example-api
+dbDialect = mysql
+docker_db_enable = true
+pattern_version = latest
+```
+
+
+```isy project install```
+
+```
+.
+└── isy
+    └── project
+        └── install
+```
+
+Se encarga de instalar todos los paquetes necesarios para poder levantar el proyecto de isy, de igual manera en caso de que no detecte un ambiente virtual configurado, crea uno. Para esto se debe tener instalado el módulo de virtualenv de python `pip install virtualenv`
+
+Al finalizar su ejecución, deberá crear una carpeta *venv* con todos los paquetes declarados en *requirements.txt* instalados
+
+```isy project migrate```
+```
+.
+└── isy
+    └── project
+        └── migrate
+
+Arguments:
+- apply-at-db: Bandera que indica si los cambios en los modelos debe impactar directamente en la base de datos.
+```
+
+
+```isy project run```
+```
+.
+└── isy
+    └── project
+        └── run
+
+Arguments:
+- method: Define el método utilizado para levantar la aplicación. Sólo se permiten los valores [*flask-run*, *docker*]. Default=*flask-run*
+- only-project-app: Si se selecciona docker como método, se puede especificar si sólo se debe levantar el contenedor de la app, o todos los declarados en el archivo docker-compose.
+- rebuild-docker: Solo se puede utilizar con método docker. Indica si al levantar la app se debe re-construir la imagen de docker.
+```

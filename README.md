@@ -27,59 +27,31 @@ pip install isyflask-cli
 Para iniciar un proyecto ejecute el siguiente comando y responda las preguntas que salgan en el prompt:
 
 ````commandline
-isyflask-cli project init
-pip install -r requirements.txt
+isy project init
 ````
 
 Cambie el directorio al generado en el paso anterior. Utilizando *Docker*, el proyecto se levanta utilizando el siguiente comando:
 
 ````commandline
-docker-compose up
+isy docker up
 ````
 
-Si no utiliza docker, necesitará ejecutar lo siguiente:
+Si no utiliza docker, necesitará ejecutar lo siguiente para instalar los paquetes necesarios para su ejecución:
 
-_Windows CMD_:
-```
-python -m venv venv
-source ./venv/Scripts/activate
-
-set FLASK_APP=api
-set FLASK_RUN_HOST=0.0.0.0
-set FLASK_ENV=development 
-
-flask db migrate
-flask db upgrade
-flask run --host=0.0.0.0
+```commandline
+isy project install
+isy project run
 ```
 
-_Windows Powershell_:
-```
-python -m venv venv
-source ./venv/Scripts/activate
+## Actualización de base de datos
+En caso de que se empiecen agregar los modelos y desee mantener una sincronización con su base de datos. Debe utilizar el siguiente comando:
 
-$Env:FLASK_APP="api"
-$Env:FLASK_RUN_HOST="0.0.0.0"
-$Env:FLASK_ENV="development"
-
-flask db migrate
-flask db upgrade
-flask run --host=0.0.0.0
+```commandline
+isy project migrate --apply-at-db
 ```
 
-_Mac_ o _Linux_:
-```
-python -m venv venv
-source ./venv/bin/activate
+La bandera `--apply-at-db` indicará si quiere impactar los cambios de los modelos en base de datos, en caso de no agregarla, sólo generará los modelos de base de datos, sin afectaciones en las tablas.
 
-export FLASK_APP=api
-export FLASK_RUN_HOST=0.0.0.0
-export FLASK_ENV=development
-
-flask db migrate
-flask db upgrade
-flask run --host=0.0.0.0
-```
 
 ## SQLAlchemy, Alembic y Blueprint
 
