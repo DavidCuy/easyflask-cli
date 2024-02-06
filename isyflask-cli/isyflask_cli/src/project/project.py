@@ -107,7 +107,7 @@ def db_migrate(apply_at_db: bool = typer.Option(help='Indica si se aplica la mig
 def run_app(
         method: str = typer.Option(help='Método para levantar la aplicación', default='flask-run'),
         only_project_app: bool = typer.Option(help='Indica si solo se levanta la app usando docker', default=False),
-        rebuild_docker: bool = typer.Option(help='Indica si solo se construye la app usando docker', default=False)):
+        rebuild_docker: bool = typer.Option(help='Indica si solo se levanta o se construye la app usando docker', default=False)):
     if only_project_app and not (method == 'docker'):
         typer.echo('Solo se puede usar "only-docker-app" seleccionando docker como método de ejecución')
         raise typer.Abort()
@@ -130,7 +130,7 @@ def run_app(
             typer.echo('No se encuentra el comando docker-compose instalado en el equipo', color=typer.colors.RED)
             typer.Abort()
         try:
-            extra_params = ' --build'
+            extra_params = ' --build' if rebuild_docker else ''
             output_docker_filename = 'docker-compose.yml'
             if only_project_app:
                 docker_file = load_compose_file()
