@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "isyflask-cli"
-version = "0.5.0"
+version = "0.6.0"
 description = "Un cli para manejar proyectos de API con flask"
 authors = ["David Cuy <david.cuy.sanchez@gmail.com>"]
 readme = "README.md"
@@ -22,6 +22,7 @@ cookiecutter = "^2.1.1"
 toml = "^0.10.2"
 typing-extensions = "^4.9.0"
 PyYAML = "~6.0.1"
+setuptools = "~72.1.0"
 
 [build-system]
 requires = ["poetry-core"]

@@ -17,6 +17,7 @@ install_requires = \
  'toml>=0.10.2,<0.11.0',
  'typer[all]>=0.5.0,<0.6.0',
  'typing-extensions>=4.9.0',
+ 'setuptools==72.1.0',
  'PyYAML==6.0.1']
 
 entry_points = \
@@ -24,7 +25,7 @@ entry_points = \
 
 setup_kwargs = {
     'name': 'isyflask-cli',
-    'version': '0.5.0',
+    'version': '0.6.0',
     'description': 'Un cli para manejar proyectos de API con flask.',
     'author': 'David Cuy',
     'author_email': 'david.cuy.sanchez@gmail.com',
