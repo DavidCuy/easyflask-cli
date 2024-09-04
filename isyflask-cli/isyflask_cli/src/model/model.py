@@ -27,7 +27,7 @@ def new_model(name: str = typer.Option(..., help='Nombre del nuevo modelo.'), ta
 
 
 @app.command('fromJson')
-def new_endpoint(
+def new_from_json(
         name: str = typer.Option(..., help='Nombre del archivo JSON a leer. Sin extension'),
         tablename: str = typer.Option(help='Nombre de la tabla', default='same-model-name')
     ):
@@ -106,7 +106,6 @@ def new_endpoint(
 
 
     typer.echo(f'{name} se agrego correctamente!', color=typer.colors.GREEN)
-
 
 def __generate_full_model_config(config: Config, name: str, tablename: str):
     models_folder_path = Path(config.project.folders.models)
